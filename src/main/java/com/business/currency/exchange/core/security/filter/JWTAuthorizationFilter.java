@@ -1,13 +1,10 @@
 package com.business.currency.exchange.core.security.filter;
 
-import com.business.currency.exchange.core.security.service.JwtProvider;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -19,23 +16,17 @@ import java.security.Key;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Component
 public class JWTAuthorizationFilter extends OncePerRequestFilter {
 
     private final String HEADER = "Authorization";
     private final String PREFIX = "Bearer ";
     private final String SECRET = "exchangeJWT";
 
-    @Autowired
-    JwtProvider jwtProvider;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         try {
             if (existeJWTToken(request, response)) {
-                String jwtToken = request.getHeader(HEADER).replace(PREFIX, "");
-                Claims claims = jwtProvider.validateToken(jwtToken);
-                //Claims claims = validateToken(request);
+                Claims claims = validateToken(request);
                 if (claims.get("authorities") != null) {
                     setUpSpringAuthentication(claims);
                 } else {

@@ -24,13 +24,9 @@ import java.util.stream.Collectors;
 @RestController
 public class AuthController {
 
-
-    @Autowired
-    JwtProvider jwtProvider;
-
     @PostMapping("auth")
     public User login(@RequestParam("user") String username) {
-        String token = jwtProvider.generateToken();
+        String token = generateToken();
         User user = new User();
         user.setUser(username);
         user.setToken(token);
