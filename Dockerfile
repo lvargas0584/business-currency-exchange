@@ -1,5 +1,5 @@
 FROM openjdk:11-ea-9-jdk-slim
-EXPOSE 8080
+EXPOSE 8095
 RUN addgroup spring
 RUN adduser --ingroup spring  spring
 USER spring:spring
