@@ -1,8 +1,8 @@
 package com.business.currency.exchange;
 
-import com.business.currency.exchange.core.security.filter.JWTAuthorizationFilter;
 import com.business.currency.exchange.core.entity.ExchangeRatesEntity;
 import com.business.currency.exchange.core.repository.ExchangeRatesRepository;
+import com.business.currency.exchange.security.filter.JWTAuthorizationFilter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -52,7 +52,13 @@ public class BusinessCurrencyExchangeApplication {
             http.csrf().disable()
                     .addFilterAfter(new JWTAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class)
                     .authorizeRequests()
-                    .antMatchers(HttpMethod.POST, "/auth").permitAll()
+                    .antMatchers( "/auth",
+                            "/swagger-ui.html",
+                            "/v3/api-docs/**",
+                            "/api-docs.yaml",
+                            "/favicon.ico",
+                            "/swagger-ui/**")
+                    .permitAll()
                     .anyRequest().authenticated();
         }
     }
